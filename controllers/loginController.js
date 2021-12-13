@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const authy = require("authy")(process.env.ACCOUNT_SECURITY_API_KEY);
 
-exports.adminLogin = (req, res) => {
+exports.login = (req, res) => {
   console.log(req.body);
   User.findOne({
     raw: true,

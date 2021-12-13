@@ -3,7 +3,7 @@ const loginControlller = require("../controllers/loginController");
 const router = express.Router();
 
 router.post("/register", loginControlller.registerUser);
-router.post("/login", loginControlller.adminLogin);
+router.post("/login", loginControlller.login);
 router.post("/verifyOTP", loginControlller.verifyOtp);
 router.post("/requestOTP", loginControlller.requestOtp);
 
