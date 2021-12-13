@@ -1,0 +1,209 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Authentication System",
+      "contact": {}
+    },
+    "host": "localhost:8000",
+    "securityDefinitions": {},
+    "schemes": ["http", "https"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+      "/api/v1/register": {
+        "post": {
+          "summary": "For Register user",
+          "tags": ["Register"],
+          "deprecated": false,
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Register"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/api/v1/login": {
+        "post": {
+          "summary": "For admin login use this end point",
+          "tags": ["Login"],
+          "deprecated": false,
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/LoginAdmin"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/api/v1/requestOTP": {
+        "post": {
+          "summary": "For requesting to send OTP",
+          "tags": ["Login"],
+          "deprecated": false,
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/RequestOTP"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/api/v1/verifyOTP": {
+        "post": {
+          "summary": "Verify the OTP",
+          "tags": ["Login"],
+          "deprecated": false,
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/verifyOTP"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "LoginAdmin": {
+        "title": "Login Request",
+        "example": {
+          "username": "deverror404",
+          "password": "Winjit@123"
+        },
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ]
+      },
+      "Register": {
+        "title": "Register Request",
+        "example": {
+          "username": "deverror404",
+          "password": "Winjit@123",
+          "contact": "9407204740",
+          "email": "apoorvag@winjit.com",
+          "role": "Admin"
+        },
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+
+        },
+        "required": [
+          "username",
+          "password",
+          "contact",
+          "email",
+          "role"
+        ]
+      },
+      "verifyOTP": {
+        "title": "Verify OTP Request",
+        "example": {
+          "authyId": "392823989",
+          "OTP": "29386492"
+        },
+        "type": "object",
+        "properties": {
+          "authyId": {
+            "type": "string"
+          },
+          "OTP": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "authyId",
+          "OTP"
+        ]
+      },
+      "RequestOTP": {
+        "title": "OTP Request",
+        "example": {
+          "authyId": "392823989"
+        },
+        "type": "object",
+        "properties": {
+          "authyId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "authyId"
+        ]
+      }
+    }
+  }
+  
