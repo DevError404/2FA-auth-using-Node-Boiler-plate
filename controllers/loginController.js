@@ -13,41 +13,55 @@ exports.adminLogin = (req, res) => {
     where: { name: req.body.username },
   })
     .then((result) => {
-      bcrypt.compare(req.body.password, result.password).then((bool) => {
-        if (!bool) {
-          console.log("Wrong credentials");
-        } else {
-          if (result.role === "Admin") {
-            authy.request_sms(result.authyId, function (err, respon) {
-              if (err) {
-                console.log(err);
-              } else {
-                res.send(
-                  reponseGenerator.getResponse(200, "Success", true, [
-                    { authyId: result.authyId, message: respon.message },
-                  ])
-                );
-              }
-            });
-          } else {
+      if (result) {
+        bcrypt.compare(req.body.password, result.password).then((bool) => {
+          if (!bool) {
             res.send(
               reponseGenerator.getResponse(200, "Success", true, [
                 { authyId: result.authyId, message: "Login successful" },
               ])
             );
+          } else {
+            if (result.role === "Admin") {
+              authy.request_sms(result.authyId, function (err, respon) {
+                if (err) {
+                  res.send(
+                    reponseGenerator.getResponse(503, "Error", false, [err])
+                  );
+                } else {
+                  res.send(
+                    reponseGenerator.getResponse(200, "Success", true, [
+                      { authyId: result.authyId, message: respon.message },
+                    ])
+                  );
+                }
+              });
+            } else {
+              res.send(
+                reponseGenerator.getResponse(200, "Success", true, [
+                  { authyId: result.authyId, message: "Login successful" },
+                ])
+              );
+            }
           }
-        }
-      });
+        });
+      } else {
+        res.send(
+          reponseGenerator.getResponse(403, "Not found", false, [
+            { message: "Invalid Credentials" },
+          ])
+        );
+      }
     })
     .catch((err) => {
-      console.log(err);
+      res.send(reponseGenerator.getResponse(503, "Error", false, [err]));
     });
 };
 
 exports.requestOtp = (req, res) => {
   authy.request_sms(req.body.authyId, function (err, respon) {
     if (err) {
-      console.log(err);
+      res.send(reponseGenerator.getResponse(503, "Error", false, [err]));
     } else {
       res.send(
         reponseGenerator.getResponse(200, "Success", true, [
@@ -68,7 +82,7 @@ exports.registerUser = (req, res) => {
         "91",
         (err, response) => {
           if (err) {
-            console.log(err);
+            res.send(reponseGenerator.getResponse(503, "Error", false, [err]));
           } else {
             User.create({
               name: req.body.username,
@@ -80,7 +94,9 @@ exports.registerUser = (req, res) => {
             });
             authy.request_sms(response.user.id, function (err, respon) {
               if (err) {
-                console.log(err);
+                res.send(
+                  reponseGenerator.getResponse(503, "Error", false, [err])
+                );
               } else {
                 res.send(
                   reponseGenerator.getResponse(200, "Success", true, [
@@ -94,13 +110,18 @@ exports.registerUser = (req, res) => {
       );
     })
     .catch((err) => {
-      console.log(err);
+      res.send(reponseGenerator.getResponse(503, "Error", false, [err]));
     });
 };
 
 exports.verifyOtp = (req, res) => {
   authy.verify(req.body.authyId, req.body.OTP, function (err, response) {
-    if (err) console.log(err);
-    else console.log(response);
+    if (err) res.send(reponseGenerator.getResponse(503, "Error", false, [err]));
+    else
+      res.send(
+        reponseGenerator.getResponse(200, "Success", true, [
+          { message: response.message },
+        ])
+      );
   });
 };
